@@ -7,15 +7,29 @@ from tkinter import *
 class Detector:
     def __init__(self):
         mixer.init()
-        self.sound = mixer.Sound("sounds/winchester.mp3")
+        self.sound_fire = mixer.Sound("sounds/winchester.mp3")
+        self.sound_reload_1 = mixer.Sound("sounds/winchester_reload_part1.mp3")
+        self.sound_reload_2 = mixer.Sound("sounds/winchester_reload_part2.mp3")
+        self.sound_order = 0
 
     def show(self, key):
 
-        self.sound.play()
+
 
         if key == Key.esc:
             # Stop listener
             return False
+        elif key == Key.enter or key == Key.tab or key == Key.delete or key == Key.backspace:
+            self.sound_fire.play()
+        else:
+            if self.sound_order == 0:
+                self.sound_reload_1.play()
+                self.sound_order = 1
+            elif self.sound_order == 1:
+                self.sound_reload_2.play()
+                self.sound_order = 0
+            else:
+                self.sound_order = 0
 
     def detect(self):
         with Listener(on_press=self.show) as listener:
